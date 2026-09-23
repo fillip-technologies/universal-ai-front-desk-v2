@@ -1,0 +1,14 @@
+node_modules
+dist
+.data
+.git
+.env
+.env.local
+*.log
+backend/.venv
+backend/__pycache__
+backend/**/__pycache__
+backend/.env
+.claude
+backend/smoke_test.py
+**/.DS_Store

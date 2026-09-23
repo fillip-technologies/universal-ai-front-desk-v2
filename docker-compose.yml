@@ -1,0 +1,64 @@
+# Production stack: PostgreSQL + the combined app (FastAPI serving the built
+# React frontend) as a single container.
+#
+# Usage:
+#   cp .env.example .env      # then edit JWT_SECRET, ADMIN_PASSWORD, POSTGRES_PASSWORD
+#   docker compose up --build
+#
+# The app listens on http://localhost:8000 (web UI + /api/*).
+
+# Fixed project name so containers/volumes are named jansunwayi-ai-* no matter
+# what the checkout directory is called.
+name: jansunwayi-ai
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-jansunwayi}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      # Runs a real query against the app database (pg_isready alone passes
+      # even when the named database doesn't exist).
+      test: ["CMD-SHELL", "psql -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\" -tAc 'select 1' >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    environment:
+      # Passed as components, not as a pre-built URL: the backend
+      # percent-encodes them, so passwords containing @ / : + work correctly.
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-jansunwayi}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env}
+      JWT_EXPIRES_DAYS: ${JWT_EXPIRES_DAYS:-7}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@jansunwayi.gov.in}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in .env}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER:-}
+      ESCALATION_ENABLED: ${ESCALATION_ENABLED:-true}
+      ESCALATION_SWEEP_MINUTES: ${ESCALATION_SWEEP_MINUTES:-15}
+      AADHAAR_RELAXED_VALIDATION: ${AADHAAR_RELAXED_VALIDATION:-true}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8000}
+
+volumes:
+  postgres_data:

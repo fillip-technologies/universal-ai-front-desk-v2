@@ -1,0 +1,6 @@
+{
+  "name": "JanSunwayi AI",
+  "description": "Frictionless public sector civic grievance redressal system tailored for a state government's administrative hierarchy — configurable for any Indian state.",
+  "requestFramePermissions": ["camera", "microphone", "geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
