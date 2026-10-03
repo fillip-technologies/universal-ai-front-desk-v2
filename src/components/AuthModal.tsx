@@ -4,6 +4,8 @@ import { AuthRole, AuthSession, OfficialUser, BIHAR_DEPARTMENTS } from '../types
 import { BIHAR_DISTRICTS, BIHAR_DISTRICT_NAMES } from '../data/biharData';
 import { signupCitizen, signupOfficial, signupCmo, login } from '../services/auth';
 import { requestAadhaarOtp, verifyAadhaarOtp } from '../services/kyc';
+import { StoryPhoto } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 interface AuthModalProps {
   initialRole?: AuthRole;
@@ -194,7 +196,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       <div className="card-elevated max-w-md w-full rounded-2xl text-slate-900 shadow-2xl overflow-hidden my-4 sm:my-8 max-h-[95vh] flex flex-col animate-in fade-in duration-200">
         {/* Header — the one dark band, so the card reads as government-issued
             without darkening the form itself. */}
-        <div className="brand-gradient text-white px-5 py-4 flex items-center justify-between gap-3 shrink-0">
+        <div className="relative isolate overflow-hidden text-white px-5 pt-16 pb-4 flex items-end justify-between gap-3 shrink-0">
+          <StoryPhoto
+            image={role === 'citizen' ? STORY_IMAGES.voiceHandpump : role === 'cmo' ? STORY_IMAGES.handsRaised : STORY_IMAGES.waitingOffice}
+            eager
+            className="absolute inset-0 -z-20"
+          />
+          <div className="photo-scrim-bottom absolute inset-0 -z-10" aria-hidden />
           <div className="flex items-center space-x-3 min-w-0">
             <div className="w-10 h-10 rounded-xl bg-white/15 text-amber-300 flex items-center justify-center shrink-0">
               {role === 'citizen' ? (

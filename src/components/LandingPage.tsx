@@ -8,6 +8,8 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  ChevronsLeftRight,
+  Quote,
   Fingerprint,
   Globe2,
   Languages,
@@ -23,7 +25,8 @@ import {
   Workflow,
 } from 'lucide-react';
 import { Link } from '../lib/router';
-import { Brand, PublicHeader, SectionHeading, buttonStyles } from './jansunwayi-ui';
+import { Brand, PublicHeader, SectionHeading, StoryPhoto, buttonStyles } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 const FILING_WAYS = [
   [Smartphone, 'Web & mobile', 'File from any browser, even on a basic connection.'],
@@ -150,6 +153,46 @@ function ProductDemo() {
   );
 }
 
+const PAIN_POINTS = [
+  ['A day’s wages lost', 'to travel to the block office — often more than once for the same application.'],
+  ['Forms in a language that isn’t yours', 'so the problem is written down by someone else, or not at all.'],
+  ['No reply, no receipt', 'and no way to know whether anyone has read it, or who to ask next.'],
+] as const;
+
+/** Before / after compare slider. The range input carries all interaction,
+ *  so it works with keyboard and screen readers as well as drag. */
+function BeforeAfter() {
+  const [pos, setPos] = useState(50);
+  return (
+    <div className="photo-frame relative mx-auto aspect-[786/992] w-full max-w-[520px] select-none">
+      <StoryPhoto image={STORY_IMAGES.afterKiosk} className="absolute inset-0" />
+      <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+        <StoryPhoto image={STORY_IMAGES.beforeUnheard} className="absolute inset-0" />
+      </div>
+      <span className="absolute left-3 top-3 rounded-full bg-black/55 px-3 py-1 text-xs font-bold text-white backdrop-blur">
+        <span className="font-devanagari">पहले</span> · Before
+      </span>
+      <span className="absolute right-3 top-3 rounded-full bg-success px-3 py-1 text-xs font-bold text-white">
+        <span className="font-devanagari">अब</span> · After
+      </span>
+      <div className="pointer-events-none absolute inset-y-0 w-0.5 bg-white shadow-[0_0_12px_rgba(0,0,0,.4)]" style={{ left: `${pos}%` }} aria-hidden>
+        <span className="absolute left-1/2 top-1/2 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-brand shadow-lg">
+          <ChevronsLeftRight className="size-5" />
+        </span>
+      </div>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={pos}
+        onChange={(e) => setPos(Number(e.target.value))}
+        aria-label="Drag to compare before and after"
+        className="absolute inset-0 size-full cursor-ew-resize opacity-0"
+      />
+    </div>
+  );
+}
+
 /** Stylised preview of the CMO monitor. Capability figures only; the bars are
  *  decorative and captioned as such. */
 function DashboardPreview() {
@@ -194,40 +237,118 @@ export function LandingPage() {
     <div className="bg-background">
       <PublicHeader />
       <main>
-        <section className="hero-editorial overflow-hidden text-foreground">
-          <div className="page-shell grid min-h-[700px] items-center gap-16 py-16 lg:grid-cols-[1.08fr_.92fr] lg:py-20">
+        <section className="relative isolate overflow-hidden text-white">
+          <StoryPhoto image={STORY_IMAGES.handsRaised} eager className="absolute inset-0 -z-20" />
+          <div className="photo-scrim absolute inset-0 -z-10" aria-hidden />
+          <div className="page-shell flex min-h-[640px] flex-col justify-center py-20 lg:min-h-[720px]">
+            <p className="mb-6 inline-flex w-fit items-center gap-2 border-b border-white/30 pb-2 text-xs font-bold uppercase text-white/85">
+              <Globe2 className="size-4" />
+              Built for every citizen, in every voice
+            </p>
+            <h1 className="display-title max-w-3xl text-5xl font-extrabold leading-[1.03] sm:text-6xl lg:text-7xl">
+              Every voice,
+              <br />
+              <span className="text-(--accent-400)">finally heard.</span>
+            </h1>
+            <p className="mt-6 font-devanagari text-2xl font-semibold text-white/90 sm:text-3xl">हर आवाज़ की सुनवाई।</p>
+            <p className="mt-6 max-w-xl text-base leading-7 text-white/80">
+              Too many grievances never reach the desk that can fix them. JanSunwayi AI lets a citizen speak in their own
+              language, sends the complaint to the right officer, and keeps it moving until action is taken.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link to="/file" className={buttonStyles({ variant: 'primary', size: 'large' })}>
+                <Mic className="size-5" />
+                Speak your grievance
+              </Link>
+              <Link to="/track" className={`${buttonStyles({ size: 'large' })} border border-white/40 !bg-white/10 text-white !shadow-none backdrop-blur hover:!bg-white/20`}>
+                <Search className="size-5" />
+                Track by ID
+              </Link>
+            </div>
+            <div className="mt-10 grid max-w-xl grid-cols-2 gap-y-4 border-t border-white/25 pt-5 text-xs font-bold text-white/90 sm:grid-cols-4">
+              <span>6 languages</span>
+              <span>28 departments</span>
+              <span>48h escalation</span>
+              <span>60-day clock</span>
+            </div>
+          </div>
+        </section>
+
+        {/* Chapter 1 — the problem */}
+        <section className="section-pad">
+          <div className="page-shell grid items-center gap-12 lg:grid-cols-[1.15fr_.85fr]">
+            <figure className="photo-frame aspect-[16/10]">
+              <StoryPhoto image={STORY_IMAGES.waitingOffice} />
+            </figure>
             <div>
-              <p className="mb-6 inline-flex items-center gap-2 border-b border-primary/30 pb-2 text-xs font-bold uppercase text-link">
-                <Globe2 className="size-4" />
-                Built for every citizen, in every voice
+              <p className="chapter-tag">Chapter 1 · Unheard</p>
+              <h2 className="display-title mt-4 text-3xl font-bold leading-tight text-brand sm:text-4xl">
+                For too long, a complaint meant a queue — and then silence.
+              </h2>
+              <p className="mt-4 font-devanagari text-xl font-semibold text-brand/70">कतार लंबी, सुनवाई नहीं।</p>
+              <ul className="mt-8 grid gap-5">
+                {PAIN_POINTS.map(([title, body]) => (
+                  <li key={title} className="border-l-2 border-primary/40 pl-4">
+                    <p className="font-bold text-brand">{title}</p>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">{body}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Chapter 2 — the change */}
+        <section className="sky-band section-pad border-y border-border">
+          <div className="page-shell grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <p className="chapter-tag">Chapter 2 · Heard</p>
+              <h2 className="display-title mt-4 text-3xl font-bold leading-tight text-brand sm:text-4xl">
+                Same citizen. Same problem. A different answer.
+              </h2>
+              <p className="mt-4 font-devanagari text-xl font-semibold text-brand/70">अर्ज़ी हाथ में थी, अब रसीद हाथ में है।</p>
+              <p className="mt-6 max-w-xl leading-7 text-muted-foreground">
+                At the Common Service Centre down the road, he speaks his complaint in his own words. The operator verifies his
+                Aadhaar, the kiosk prints a tracking slip, and the right officer has it before he reaches home.
               </p>
-              <h1 className="display-title max-w-3xl text-5xl font-extrabold leading-[1.03] text-brand sm:text-6xl lg:text-7xl">
-                Every voice,
-                <br />
-                <span className="text-primary">beautifully heard.</span>
-              </h1>
-              <p className="mt-6 font-devanagari text-xl font-semibold text-brand/70 sm:text-2xl">आपकी आवाज़, सही दफ़्तर तक।</p>
-              <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground">
-                Speak or type your grievance. JanSunwayi AI understands it, sends it to the right government desk, and keeps it moving until action is taken.
+              <p className="mt-6 text-sm font-semibold text-link">Drag the slider to see the difference →</p>
+            </div>
+            <BeforeAfter />
+          </div>
+        </section>
+
+        {/* Chapter 3 — in your own language */}
+        <section className="section-pad">
+          <div className="page-shell grid items-center gap-12 lg:grid-cols-[.8fr_1.2fr]">
+            <figure className="photo-frame aspect-[4/5] w-full max-w-md justify-self-center lg:justify-self-start">
+              <StoryPhoto image={STORY_IMAGES.voiceHandpump} />
+              <figcaption className="photo-scrim-bottom absolute inset-x-0 bottom-0 p-5 pt-20 text-white">
+                <Quote className="size-5 text-(--accent-400)" />
+                <p className="mt-2 font-devanagari text-lg font-semibold leading-snug">“हमरा गाँव के चापाकल दस दिन से सूखल बा…”</p>
+                <p className="mt-1 text-xs text-white/75">Spoken in Bhojpuri · understood by the system</p>
+              </figcaption>
+            </figure>
+            <div>
+              <p className="chapter-tag">Chapter 3 · Your language</p>
+              <h2 className="display-title mt-4 text-3xl font-bold leading-tight text-brand sm:text-4xl">
+                Speak the way you speak at home.
+              </h2>
+              <p className="mt-4 max-w-xl leading-7 text-muted-foreground">
+                No forms, no English, no middleman. A voice note in Bhojpuri, Maithili or Magahi becomes a clear summary for the
+                officer — routed, scored for urgency and given a tracking ID.
               </p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link to="/file" className={buttonStyles({ variant: 'primary', size: 'large' })}>
-                  <Mic className="size-5" />
-                  Speak your grievance
-                </Link>
-                <Link to="/track" className={buttonStyles({ variant: 'secondary', size: 'large' })}>
-                  <Search className="size-5" />
-                  Track by ID
-                </Link>
-              </div>
-              <div className="editorial-rule mt-10 grid max-w-xl grid-cols-2 gap-y-4 pt-5 text-xs font-bold text-brand sm:grid-cols-4">
-                <span>6 languages</span>
-                <span>28 departments</span>
-                <span>48h escalation</span>
-                <span>60-day clock</span>
+              <p className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-lg font-bold text-brand">
+                <span className="font-devanagari" lang="hi">हिन्दी</span>
+                <span className="font-devanagari" lang="bho">भोजपुरी</span>
+                <span className="font-devanagari" lang="mai">मैथिली</span>
+                <span className="font-devanagari" lang="mag">मगही</span>
+                <span className="font-urdu" dir="rtl" lang="ur">اردو</span>
+                <span lang="en">English</span>
+              </p>
+              <div className="mt-10">
+                <ProductDemo />
               </div>
             </div>
-            <ProductDemo />
           </div>
         </section>
 
@@ -286,6 +407,29 @@ export function LandingPage() {
           </div>
         </section>
 
+        {/* Chapter 4 — resolution */}
+        <section className="relative isolate overflow-hidden text-white">
+          <StoryPhoto image={STORY_IMAGES.waterOfHope} className="absolute inset-0 -z-20" />
+          <div className="photo-scrim absolute inset-0 -z-10" aria-hidden />
+          <div className="page-shell flex min-h-[520px] flex-col justify-center py-20">
+            <p className="chapter-tag !text-white/85">Chapter 4 · Resolved</p>
+            <h2 className="display-title mt-4 max-w-2xl text-4xl font-bold leading-tight sm:text-5xl">
+              When a village is heard, the water flows again.
+            </h2>
+            <p className="mt-4 font-devanagari text-2xl font-semibold text-white/90">जब सुनवाई होती है, गाँव बदलता है।</p>
+            <p className="mt-6 max-w-xl leading-7 text-white/80">
+              Every grievance carries a statutory clock and an officer's name. Citizens can see who holds their case, and the
+              state can see where help is still waiting.
+            </p>
+            <div className="mt-8">
+              <Link to="/file" className={buttonStyles({ variant: 'primary', size: 'large' })}>
+                <Mic className="size-5" />
+                Raise your voice
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section id="features" className="section-pad scroll-mt-20">
           <div className="page-shell">
             <SectionHeading kicker="Built for public service" title="Intelligence with accountability" />
@@ -298,20 +442,6 @@ export function LandingPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="sky-band border-y border-border py-11">
-          <div className="page-shell text-center">
-            <p className="text-xs font-bold uppercase tracking-[.15em] text-link">Speak as you are</p>
-            <p className="mt-4 flex flex-wrap justify-center gap-x-8 gap-y-3 text-xl font-bold text-brand sm:text-2xl">
-              <span className="font-devanagari" lang="hi">हिन्दी</span>
-              <span className="font-devanagari" lang="bho">भोजपुरी</span>
-              <span className="font-devanagari" lang="mai">मैथिली</span>
-              <span className="font-devanagari" lang="mag">मगही</span>
-              <span className="font-urdu" dir="rtl" lang="ur">اردو</span>
-              <span lang="en">English</span>
-            </p>
           </div>
         </section>
 

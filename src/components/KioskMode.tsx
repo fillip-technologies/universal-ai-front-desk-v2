@@ -17,6 +17,8 @@ import { analyzeGrievanceWithAI } from '../services/api';
 import { createComplaintBatch, draftFromAnalysis, VerificationRequiredError } from '../services/complaints';
 import { requestAadhaarOtp, verifyAadhaarOtp } from '../services/kyc';
 import { NatureNotice } from './NatureBadge';
+import { StoryPhoto } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 interface KioskModeProps {
   onExit: () => void;
@@ -262,6 +264,13 @@ export const KioskMode: React.FC<KioskModeProps> = ({ onExit }) => {
       <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8 space-y-8">
         {step === 'language' && (
           <div className="space-y-6">
+            <figure className="relative h-56 sm:h-72 overflow-hidden rounded-3xl border-2 border-white/15 shadow-xl">
+              <StoryPhoto image={STORY_IMAGES.afterKiosk} eager className="absolute inset-0" />
+              <figcaption className="photo-scrim-bottom absolute inset-x-0 bottom-0 p-5 pt-16">
+                <p className="text-2xl sm:text-3xl font-black leading-tight">बोलिए, हम सुन रहे हैं।</p>
+                <p className="text-sm text-blue-100">Speak — your grievance reaches the right officer.</p>
+              </figcaption>
+            </figure>
             <div className="text-center space-y-2">
               <h2 className="text-2xl sm:text-4xl font-black">अपनी भाषा चुनें</h2>
               <p className="text-blue-200 text-sm sm:text-base">Choose your language • اپنی زبان منتخب کریں</p>

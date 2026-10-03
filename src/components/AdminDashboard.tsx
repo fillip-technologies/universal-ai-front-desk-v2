@@ -30,6 +30,8 @@ import {
   listCmoAccounts,
   setCmoApproval
 } from '../services/api';
+import { PhotoBanner, PhotoGate } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 /**
  * Admin Dashboard — central administration of the AI engine.
@@ -165,10 +167,14 @@ export const AdminDashboard: React.FC = () => {
   // ── Login gate ────────────────────────────────────────────────────────────
   if (!authed) {
     return (
-      <div className="max-w-md mx-auto px-4 py-16">
-        <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl space-y-6">
-          <div className="text-center space-y-2">
-            <div className="w-16 h-16 mx-auto rounded-2xl brand-gradient text-amber-400 flex items-center justify-center">
+      <PhotoGate
+        image={STORY_IMAGES.afterKiosk}
+        captionHindi="एक इंजन, हर कियोस्क, हर गाँव।"
+        caption="One engine behind every portal and every kiosk."
+      >
+        <div className="space-y-6 text-left">
+          <div className="text-center md:text-left space-y-2">
+            <div className="w-16 h-16 mx-auto md:mx-0 rounded-2xl brand-gradient text-amber-400 flex items-center justify-center">
               <Lock className="w-8 h-8" />
             </div>
             <h2 className="text-xl font-black text-slate-900">System Administration</h2>
@@ -207,7 +213,7 @@ export const AdminDashboard: React.FC = () => {
             </p>
           </form>
         </div>
-      </div>
+      </PhotoGate>
     );
   }
 
@@ -235,7 +241,8 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Banner */}
-      <div className="brand-gradient border border-(--brand-700) rounded-2xl p-6 sm:p-8 text-white shadow-md space-y-2">
+      <PhotoBanner image={STORY_IMAGES.afterKiosk}>
+        <div className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-2">
             <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider mono">
@@ -254,7 +261,8 @@ export const AdminDashboard: React.FC = () => {
         <p className="text-xs text-blue-100/80">
           Manage the central Gemini API key and monitor every application it powers — the Web portal and Kiosks.
         </p>
-      </div>
+        </div>
+      </PhotoBanner>
 
       {message && (
         <div

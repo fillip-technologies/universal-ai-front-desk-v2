@@ -41,6 +41,8 @@ import {
   VerificationRequiredError
 } from '../services/complaints';
 import { NatureNotice } from './NatureBadge';
+import { PhotoBanner } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 interface CitizenPortalProps {
   citizenUser: CitizenAccount | null;
@@ -566,24 +568,40 @@ export const CitizenPortal: React.FC<CitizenPortalProps> = ({
           Account state and sign-in live in the site header, which is
           citizen-scoped on this tab — a second login control here would be
           two doors to the same room. */}
-      <div className="card-elevated p-6 sm:p-8 space-y-6">
-        <div className="space-y-2 max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-blue-50 text-blue-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider mono border border-blue-100">
-            <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--accent-500)' }} />
-            <span>State Right to Public Grievance Redressal Engine</span>
+      <div className="card-elevated overflow-hidden">
+        {/* The photo follows the sub-tab: speaking up, waiting on an answer,
+            and the record of what was filed. */}
+        <PhotoBanner
+          image={
+            subTab === 'track'
+              ? STORY_IMAGES.waterOfHope
+              : subTab === 'mine'
+              ? STORY_IMAGES.afterKiosk
+              : STORY_IMAGES.voiceHandpump
+          }
+          className="rounded-none shadow-none"
+        >
+          <div className="space-y-2 max-w-3xl">
+            <div className="inline-flex items-center space-x-2 bg-white/15 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider mono border border-white/20 backdrop-blur">
+              <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--accent-400)' }} />
+              <span>State Right to Public Grievance Redressal Engine</span>
+            </div>
+            <h2 className="text-xl sm:text-3xl font-bold tracking-tight">
+              {subTab === 'track' ? 'Track your grievance' : subTab === 'mine' ? 'Your grievances' : 'Speak up. You will be heard.'}
+            </h2>
+            <p className="font-devanagari text-lg font-semibold text-white/90">
+              {subTab === 'track' ? 'आपकी शिकायत कहाँ तक पहुँची?' : subTab === 'mine' ? 'आपकी हर शिकायत का हिसाब।' : 'अपनी भाषा में, अपनी बात।'}
+            </p>
+            <p className="text-white/80 text-sm leading-relaxed">
+              Speak or write your grievance in your own language — Bhojpuri, Magahi, Maithili, Hindi,
+              Urdu or English. It is transcribed, translated, scored for urgency and routed to the
+              right department and officer, who receive a short summary rather than the raw recording.
+            </p>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
-            JanSunwayi AI Civic Grievance Portal (नागरिक शिकायत पोर्टल)
-          </h2>
-          <p className="text-slate-500 text-sm leading-relaxed">
-            Speak or write your grievance in your own language — Bhojpuri, Magahi, Maithili, Hindi,
-            Urdu or English. It is transcribed, translated, scored for urgency and routed to the
-            right department and officer, who receive a short summary rather than the raw recording.
-          </p>
-        </div>
+        </PhotoBanner>
 
         {/* Sub-navigation */}
-        <div className="flex flex-wrap items-center gap-2 pt-5 border-t border-slate-100">
+        <div className="flex flex-wrap items-center gap-2 px-6 py-4 sm:px-8">
           {([
             { id: 'submit' as const, label: 'Submit Grievance', icon: Send },
             { id: 'track' as const, label: 'Track Status', icon: Search },

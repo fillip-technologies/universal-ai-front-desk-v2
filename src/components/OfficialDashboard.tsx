@@ -26,6 +26,8 @@ import {
 } from '../types';
 import { listComplaints } from '../services/complaints';
 import { NatureBadge } from './NatureBadge';
+import { PhotoBanner, PhotoGate } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 interface OfficialDashboardProps {
   currentUser: OfficialUser | null;
@@ -108,8 +110,12 @@ export const OfficialDashboard: React.FC<OfficialDashboardProps> = ({
 
   if (!currentUser) {
     return (
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-2xl brand-gradient text-amber-400 flex items-center justify-center shadow-md">
+      <PhotoGate
+        image={STORY_IMAGES.waitingOffice}
+        captionHindi="हर फ़ाइल के पीछे एक इंतज़ार करता नागरिक है।"
+        caption="Behind every file is a citizen waiting for an answer."
+      >
+        <div className="w-16 h-16 mx-auto md:mx-0 rounded-2xl brand-gradient text-amber-400 flex items-center justify-center shadow-md">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <div className="space-y-2">
@@ -121,11 +127,11 @@ export const OfficialDashboard: React.FC<OfficialDashboardProps> = ({
         </div>
         <button
           onClick={onOpenAuthModal}
-          className="px-6 py-3 min-h-12 rounded-xl bg-(--brand-900) hover:bg-(--brand-800) text-white text-sm font-bold shadow-md transition-colors"
+          className="self-center md:self-start px-6 py-3 min-h-12 rounded-xl bg-(--brand-900) hover:bg-(--brand-800) text-white text-sm font-bold shadow-md transition-colors"
         >
           Officer Login / Sign Up
         </button>
-      </div>
+      </PhotoGate>
     );
   }
 
@@ -146,7 +152,7 @@ export const OfficialDashboard: React.FC<OfficialDashboardProps> = ({
       )}
 
       {/* Officer Welcome & Context Banner */}
-      <div className="brand-gradient rounded-2xl p-6 sm:p-8 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <PhotoBanner image={STORY_IMAGES.waitingOffice}>
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
             <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider mono">
@@ -162,8 +168,11 @@ export const OfficialDashboard: React.FC<OfficialDashboardProps> = ({
           <p className="text-xs text-blue-100/80">
             Designation: <span className="text-amber-300 font-semibold">{currentUser.designation}</span> • Jurisdiction: <span className="text-emerald-300 font-semibold">{currentUser.district || 'All Districts'}</span>
           </p>
+          <p className="pt-3 font-devanagari text-sm font-semibold text-white/90">
+            हर टिकट के पीछे एक इंतज़ार करता नागरिक है। <span className="font-sans text-xs font-normal text-white/70">Every ticket is someone waiting.</span>
+          </p>
         </div>
-      </div>
+      </PhotoBanner>
 
       {/* KPI Metric Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">

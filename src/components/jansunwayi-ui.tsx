@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { Link } from '../lib/router';
 import { cn } from '../lib/utils';
+import type { StoryImage } from '../data/storyImages';
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'navy' | 'danger';
 type ButtonSize = 'default' | 'icon' | 'large';
@@ -285,5 +286,66 @@ export function ArrowLink({ children }: { children: ReactNode }) {
       {children}
       <ChevronRight className="size-4" />
     </span>
+  );
+}
+
+/** A story photo from STORY_IMAGES, cropped to fill its box. */
+export function StoryPhoto({ image, className, eager = false }: { image: StoryImage; className?: string; eager?: boolean }) {
+  return (
+    <img
+      src={image.src}
+      alt={image.alt}
+      width={image.width}
+      height={image.height}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      className={cn('size-full object-cover', className)}
+      style={{ objectPosition: image.position }}
+    />
+  );
+}
+
+/** Page banner over a story photo — the in-app counterpart of the landing
+ *  hero, so every surface shares the same photographic language. */
+export function PhotoBanner({ image, children, className }: { image: StoryImage; children: ReactNode; className?: string }) {
+  return (
+    <div className={cn('relative isolate overflow-hidden rounded-2xl bg-(--brand-950) text-white shadow-md', className)}>
+      {/* The photo fills the right of the banner and fades into solid navy
+          behind the text, so the subject stays visible at any crop. */}
+      <div className="absolute inset-y-0 right-0 -z-10 w-full md:w-[60%]">
+        <StoryPhoto image={image} eager />
+        <div className="photo-fade-left absolute inset-0" aria-hidden />
+      </div>
+      <div className="p-6 sm:p-8 md:max-w-[58%]">{children}</div>
+    </div>
+  );
+}
+
+/** Sign-in / waiting gate: photo with a caption on one side, the message on
+ *  the other. Used where a surface is locked behind its own login. */
+export function PhotoGate({
+  image,
+  caption,
+  captionHindi,
+  children,
+}: {
+  image: StoryImage;
+  caption: string;
+  captionHindi?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-16">
+      <div className="surface-card grid overflow-hidden md:grid-cols-[1.05fr_1fr]">
+        <figure className="relative min-h-56 md:min-h-[420px]">
+          <StoryPhoto image={image} eager className="absolute inset-0" />
+          <figcaption className="photo-scrim-bottom absolute inset-x-0 bottom-0 p-5 pt-16 text-white">
+            {captionHindi && <p className="font-devanagari text-lg font-bold leading-snug">{captionHindi}</p>}
+            <p className="mt-1 text-xs text-white/80">{caption}</p>
+          </figcaption>
+        </figure>
+        <div className="flex flex-col justify-center gap-6 p-6 text-center sm:p-10 md:text-left">{children}</div>
+      </div>
+    </div>
   );
 }

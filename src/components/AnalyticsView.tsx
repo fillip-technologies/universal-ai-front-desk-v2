@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { listCmoComplaints } from '../services/complaints';
 import { needsAttention, ESCALATION_CHAIN, GrievanceComplaint, CmoUser } from '../types';
+import { PhotoBanner, PhotoGate } from './jansunwayi-ui';
+import { STORY_IMAGES } from '../data/storyImages';
 
 interface AnalyticsViewProps {
   /** The CMO Monitor has its own login, separate from officials. */
@@ -50,8 +52,12 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ currentUser, onOpe
 
   if (!currentUser) {
     return (
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-2xl brand-gradient text-amber-400 flex items-center justify-center">
+      <PhotoGate
+        image={STORY_IMAGES.handsRaised}
+        captionHindi="पूरे राज्य की आवाज़, एक नज़र में।"
+        caption="The voice of the whole state, in one view."
+      >
+        <div className="w-16 h-16 mx-auto md:mx-0 rounded-2xl brand-gradient text-amber-400 flex items-center justify-center">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <div className="space-y-2">
@@ -63,18 +69,22 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ currentUser, onOpe
         </div>
         <button
           onClick={onOpenAuthModal}
-          className="px-6 py-3 min-h-12 rounded-xl bg-(--brand-900) hover:bg-(--brand-800) text-white text-sm font-bold shadow-md"
+          className="self-center md:self-start px-6 py-3 min-h-12 rounded-xl bg-(--brand-900) hover:bg-(--brand-800) text-white text-sm font-bold shadow-md"
         >
           CMO Login / Request Access
         </button>
-      </div>
+      </PhotoGate>
     );
   }
 
   if (!currentUser.approved) {
     return (
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
+      <PhotoGate
+        image={STORY_IMAGES.handsRaised}
+        captionHindi="पूरे राज्य की आवाज़, एक नज़र में।"
+        caption="The voice of the whole state, in one view."
+      >
+        <div className="w-16 h-16 mx-auto md:mx-0 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center">
           <Hourglass className="w-8 h-8" />
         </div>
         <div className="space-y-2">
@@ -84,7 +94,7 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ currentUser, onOpe
             must approve it before statewide data is shown. Reload this page once you have been approved.
           </p>
         </div>
-      </div>
+      </PhotoGate>
     );
   }
 
@@ -133,7 +143,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ currentUser, onOpe
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
       {/* Banner */}
-      <div className="brand-gradient border border-(--brand-700) rounded-2xl p-6 sm:p-8 text-white shadow-md space-y-2">
+      <PhotoBanner image={STORY_IMAGES.handsRaised}>
+        <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2">
           <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-0.5 rounded uppercase tracking-wider mono">
             CMO COMMAND CENTRE
@@ -149,7 +160,8 @@ export const AnalyticsView: React.FC<AnalyticsViewProps> = ({ currentUser, onOpe
           Live statewide view: 9 Divisions • 38 Districts • 101 Subdivisions • 534 Blocks • 8,406 Gram
           Panchayats. Statutory compliance under the state's Right to Public Grievance Redressal framework.
         </p>
-      </div>
+        </div>
+      </PhotoBanner>
 
       {/* CMO Headline KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-6 gap-3 sm:gap-4">

@@ -184,6 +184,19 @@
 .feature-cell:hover { background: var(--card); transform: translateY(-3px); }
 .magazine-card { border: 1px solid color-mix(in oklab, var(--primary) 19%, transparent); background: color-mix(in oklab, var(--card) 88%, transparent); box-shadow: var(--shadow-card); }
 
+/* Story photography. Scrims use the fixed --brand-950 navy (not --brand,
+   which flips light in dark mode) so white text over a photo always reads. */
+.photo-scrim { background: linear-gradient(90deg, color-mix(in oklab, var(--brand-950) 94%, transparent) 0%, color-mix(in oklab, var(--brand-950) 78%, transparent) 42%, color-mix(in oklab, var(--brand-950) 18%, transparent) 100%); }
+.photo-scrim-bottom { background: linear-gradient(0deg, color-mix(in oklab, var(--brand-950) 92%, transparent) 0%, color-mix(in oklab, var(--brand-950) 45%, transparent) 55%, transparent 100%); }
+@media (max-width: 767px) { .photo-scrim { background: color-mix(in oklab, var(--brand-950) 80%, transparent); } }
+.photo-fade-left { background: color-mix(in oklab, var(--brand-950) 78%, transparent); }
+@media (min-width: 768px) { .photo-fade-left { background: linear-gradient(90deg, var(--brand-950) 0%, color-mix(in oklab, var(--brand-950) 55%, transparent) 30%, transparent 75%); } }
+.chapter-tag { display: inline-flex; align-items: center; gap: .6rem; color: var(--link); font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; }
+.chapter-tag::before { content: ""; width: 2rem; height: 2px; background: currentColor; }
+.photo-frame { position: relative; overflow: hidden; border-radius: calc(var(--radius) + 4px); box-shadow: var(--shadow-card); }
+.photo-frame img { transition: transform 1.2s ease; }
+.photo-frame:hover img { transform: scale(1.03); }
+
 /* Data display */
 .metric { min-height: 148px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card); padding: 1.25rem; box-shadow: var(--shadow-card); }
 .metric p { color: var(--muted-foreground); font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
